@@ -1,6 +1,6 @@
 use clap::ArgMatches;
 
-use crate::cli;
+use crate::{cli, settings};
 
 fn extract_config_name(matches: &ArgMatches) -> &String {
     return matches
@@ -8,7 +8,12 @@ fn extract_config_name(matches: &ArgMatches) -> &String {
         .unwrap_or_else(|| panic!("Failed to extract config name from matches."));
 }
 
-pub fn run() {
+pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+    //TODO: Fix me
+    let settings = settings::load().unwrap();
     let matches = cli::run();
-    let _config_name = extract_config_name(&matches);
+    let config_name = extract_config_name(&matches);
+    dbg!(&settings);
+
+    settings::save(&settings)
 }
